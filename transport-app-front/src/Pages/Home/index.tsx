@@ -2,15 +2,10 @@ import React, { useState } from "react";
 import {
   Card,
   CardContent,
-  CardHeader,
   Tabs,
   Tab,
-  TextField,
-  Button,
-  Avatar,
   Box,
 } from "@mui/material";
-import { MapPin, Car, Clock, DollarSign, Star, Search } from "lucide-react";
 import { useAuth } from "../../Contexts/UserContext";
 import { cn } from "../../Utilities/utils";
 import TripHistory from "../TripHistory";
@@ -31,8 +26,7 @@ export default function Home() {
         </button>
       </span>
       <Card className="w-full ">
-        <CardContent>
-        <h2 className="text-2xl text-gray-500" >Dashboard do Passageiro</h2>
+        <CardContent><h2> Bem vindo(a) {sessionStorage.getItem('userName')}</h2>
           <Tabs
             value={tabValue}
             onChange={(e, newValue) => setTabValue(newValue)}

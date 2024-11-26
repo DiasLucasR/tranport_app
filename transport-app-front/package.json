@@ -1,6 +1,4 @@
 {
-  "name": "tranport-app-frontend-materialui",
-  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.5",
@@ -10,13 +8,16 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/google-map-react": "^2.1.10",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.119",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "google-map-react": "^2.2.1",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-promise-tracker": "^2.1.1",
     "react-router-dom": "^7.0.1",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.13",
@@ -47,5 +48,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "name": "tranport-app-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Lucas Rafael Oliveira Dias(DiasLucasR)",
+  "license": "GNU"
 }

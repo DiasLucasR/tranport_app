@@ -3,12 +3,11 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 class ApiService {
   private axiosInstance: AxiosInstance;
 
-
-
   constructor() {
-    const baseURL = 'http://localhost:8000/api';
+    console.log('constructor')
+    const baseURL = process.env.REACT_APP_API_URL + '/api/';
     const headers = {
-      Authorization: 'auth123',
+      Authorization: process.env.REACT_APP_AUTHORIZATION_LOCAL,
     };
     this.axiosInstance = axios.create({
       baseURL,
@@ -31,18 +30,22 @@ class ApiService {
   }
 
   // Função POST
-  async post<T>(url: string, data: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  async post<T>(url: string, data: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.axiosInstance.post<T>(url, data, config);
   }
 
   // Função PUT
-  async put<T>(url: string, data: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  async put<T>(url: string, data: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.axiosInstance.put<T>(url, data, config);
   }
 
   // Função DELETE
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.axiosInstance.delete<T>(url, config);
+  }
+
+  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.axiosInstance.patch<T>(url, data, config);
   }
 }
 

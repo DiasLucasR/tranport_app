@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,46 +9,28 @@ import {
   Box,
 } from "@mui/material";
 import { ClockIcon, DollarSignIcon, Search, StarIcon } from "lucide-react";
+import { trackPromise } from "react-promise-tracker";
+import { RideService } from "../../Services/RideService";
+import { RideProps } from "../../types/RideTypes";
 
 const viagensAntigas = [
   {
     id: 1,
-    to: "Aeroporto",
+    destination: "Aeroporto",
     from: "Aeroporto",
     date: "2023-06-15",
     value: 45.5,
   },
-  {
-    id: 2,
-    destino: "Shopping Center",
-    data: "2023-06-10",
-    valor: 22.3,
-    avaliacao: 4.5,
-  },
-  {
-    id: 3,
-    destino: "Restaurante Le Fancy",
-    data: "2023-06-05",
-    valor: 35.0,
-    avaliacao: 5.0,
-  },
-  {
-    id: 4,
-    destino: "Parque da Cidade",
-    data: "2023-05-30",
-    valor: 18.75,
-    avaliacao: 4.7,
-  },
-  {
-    id: 5,
-    destino: "Estádio Municipal",
-    data: "2023-05-25",
-    valor: 28.9,
-    avaliacao: 4.6,
-  },
 ];
 
 function TripHistory() {
+  const [history, setHistory] = useState<RideProps[]>([]);
+  useEffect(() => {
+    trackPromise(RideService.getAllRides()).then((res) => {
+      setHistory(res.data.data);
+    });
+  }, []);
+
   return (
     <Card>
       <CardHeader>
@@ -67,39 +49,35 @@ function TripHistory() {
       </CardHeader>
       <CardContent>
         <Box className="h-[400px] w-full rounded-md border p-4 overflow-auto">
-          {viagensAntigas.map((viagem) => (
-            <div
-              key={viagem.id}
-              className="flex items-center space-x-4 mb-4 pb-4 border-b last:border-b-0"
-            >
-              <Avatar>
-                <img
-                  src={`/placeholder.svg?text=${viagem.destino[0]}`}
-                  alt={viagem.destino}
-                />
-              </Avatar>
-              <div className="flex-grow">
-                <h3 className="font-semibold">{viagem.destino}</h3>
-                <div className="flex space-x-4 text-sm text-muted-foreground">
-                  <span className="flex items-center">
-                    <ClockIcon className="mr-1 h-4 w-4" />
-                    {viagem.data}
-                  </span>
-                  <span className="flex items-center">
-                    <DollarSignIcon className="mr-1 h-4 w-4" />
-                    R$ {viagem.valor.toFixed(2)}
-                  </span>
-                  <span className="flex items-center">
-                    <StarIcon className="mr-1 h-4 w-4 fill-yellow-400 stroke-yellow-400" />
-                    {viagem.avaliacao}
-                  </span>
+          {history?.length &&
+            history?.map((viagem) => {
+              return (
+                <div
+                  key={viagem?.id}
+                  className="flex items-center space-x-4 mb-4 pb-4 border-b last:border-b-0"
+                >
+                  <Avatar>
+                    <img
+                      src={`/placeholder.svg?text=${viagem?.destination}`}
+                      alt={viagem.destination}
+                    />
+                  </Avatar>
+                  <div className="flex-grow">
+                    <h3 className="font-semibold">{viagem.destination}</h3>
+                    <div className="flex space-x-4 text-sm text-muted-foreground">
+                      <span className="flex items-center">
+                        <ClockIcon className="mr-1 h-4 w-4" />
+                        {viagem.date}
+                      </span>
+                      <span className="flex items-center">
+                        <DollarSignIcon className="mr-1 h-4 w-4" />
+                        R$ {viagem.value}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <Button variant="outlined" size="small">
-                Detalhes
-              </Button>
-            </div>
-          ))}
+              );
+            })}
         </Box>
       </CardContent>
     </Card>
