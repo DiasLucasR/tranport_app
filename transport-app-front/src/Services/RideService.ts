@@ -1,4 +1,4 @@
-import { DriverProps } from "../types/RideTypes";
+import { ConfirmRideProps, DriverProps } from "../types/RideTypes";
 import ApiService from "./ApiService"
 
 export class RideService {
@@ -8,13 +8,15 @@ export class RideService {
         const userId = sessionStorage.getItem('userId');
         return this.api.post('ride/estimate', { origin, destination , customer_id: userId});
     }
-    static confirmRide(origin : string, destination : string, distance: number, duration: 'string', driver : DriverProps, value : number): Promise<any> {
-        const userId = sessionStorage.getItem('userId');
-        return this.api.patch('ride' ,{customer_id: userId, origin, destination, distance, duration, driver, value});
+    static confirmRide(data: ConfirmRideProps): Promise<any> {
+        return this.api.patch('ride/confirm' , data);
     }
     static getAllRides(): Promise<any> {
         const userId = sessionStorage.getItem('userId');
         return this.api.get('ride/' + userId);
     }
+
+
+
 
 }

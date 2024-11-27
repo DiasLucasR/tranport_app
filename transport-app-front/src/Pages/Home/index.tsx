@@ -5,6 +5,7 @@ import {
   Tabs,
   Tab,
   Box,
+  Typography,
 } from "@mui/material";
 import { useAuth } from "../../Contexts/UserContext";
 import { cn } from "../../Utilities/utils";
@@ -16,17 +17,18 @@ export default function Home() {
   const { logout } = useAuth();
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-slate-100">
       <span className="flex w-full justify-end p-1">
         <button
           onClick={logout}
           className="bg-red-500 text-white px-5 py-2 rounded"
         >
-          Sair{" "}
+          Sair
         </button>
       </span>
-      <Card className="w-full ">
-        <CardContent><h2> Bem vindo(a) {sessionStorage.getItem('userName')}</h2>
+      <Card className="w-full">
+        <CardContent className="bg-slate-100">
+        <Typography variant="h5" component="div" gutterBottom> Bem vindo(a) {sessionStorage.getItem('userName')}</Typography>
           <Tabs
             value={tabValue}
             onChange={(e, newValue) => setTabValue(newValue)}

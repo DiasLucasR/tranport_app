@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { AuthService } from "../Services/AuthService";
 import { trackPromise } from "react-promise-tracker";
-import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   isAuthenticated: boolean;

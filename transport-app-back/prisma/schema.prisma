@@ -20,6 +20,7 @@ model User {
   password    String
   userTypeId  Int       
   userType    UserType  @relation(fields: [userTypeId], references: [id])
+  trips       Trips[]
 }
 
 model UserType {
@@ -30,8 +31,25 @@ model UserType {
 
 model Trips {
   id          Int       @id @default(autoincrement())
-  from        String
-  destination String
   date        DateTime
-  value       Decimal   @db.Decimal(10, 2) 
+  origin      String
+  destination String
+  distance    Int
+  duration    String   
+  value       Int
+  driverId    Int
+  userId      Int
+  drivers     Drivers  @relation(fields: [driverId], references: [id])
+  users       User  @relation(fields: [userId], references: [id])
+}
+
+model Drivers {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  car         String
+  rating      Int
+  rate        Decimal   @db.Decimal(10, 2) 
+  minKm       Int
+  trips       Trips[]   
 }
