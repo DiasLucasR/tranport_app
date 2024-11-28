@@ -2,9 +2,14 @@ import express, { Router, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
+const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+const DATABASE_URL = `mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+process.env.DATABASE_URL = DATABASE_URL;
+
+
 // Configuração inicial
 const app = express();
-const PORT = process.env.API_PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 // Middlewares globais
 app.use(cors());

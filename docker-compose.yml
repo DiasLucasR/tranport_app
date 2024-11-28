@@ -1,43 +1,57 @@
 version: "3.8"
 services:
-  backend:
-    build:
-      context: ./transport-app-back
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: yarn dev
-    environment:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=123456789
-      - DB_NAME=transport_app
-    depends_on:
-      - mysql
 
-  mysql:
+  mysql_app:
     image: mysql:8.0
-    container_name: mysql
+    container_name: mysql_app
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 123456789
       MYSQL_DATABASE: transport_app
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql_app
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: ./transport-app-back
+    container_name: transport-app-back
+    command: sh -c "yarn migrate && yarn seed && yarn dev"
+    ports:
+      - "8080:8000"
+    volumes:
+      - ./transport-app-back:/app
+      - /app/node_modules
+    environment:
+      DB_HOST: mysql_app
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: 123456789
+      DB_NAME: transport_app
+      GOOGLE_API_KEY: <chave api>
+    depends_on:
+      - mysql_app
+    networks:
+      - app_network
 
   frontend:
     build:
-      context: ./front
+      context: ./transport-app-front
     container_name: transport-app-front
+    command: sh -c "yarn & yarn dev"
     ports:
-      - "3000:3000"
+      - "80:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8080
     depends_on:
       - backend
     networks:
       - app_network
+
 volumes:
   mysql-data:
+
+networks:
+  app_network:

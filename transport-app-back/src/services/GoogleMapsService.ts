@@ -3,7 +3,7 @@ import { DistanceMatrixRow } from "@googlemaps/google-maps-services-js";
 const {Client} = require("@googlemaps/google-maps-services-js");
 
 const client = new Client({});
-const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+const apiKey = process.env.GOOGLE_API_KEY;
 
 interface DistanceResult {
   origin: string;

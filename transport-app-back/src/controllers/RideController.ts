@@ -115,17 +115,7 @@ const RideController = {
     const destinations = [reqBody.destination];
 
     try {
-      // const resultsGoogleDistance = await GoogleMapsService.calculateDistances(origins, destinations);
-
-      const resultsGoogleDistance = [
-        {
-          origin:
-            "Rua Antonio Lopes da Silva, 867A, Vila Atlantida, Montes Claros",
-          destination: "Joao Ferreira, 531, Vila Atlantida, Montes Claros",
-          distance: "20 km",
-          duration: "1 min",
-        },
-      ];
+      const resultsGoogleDistance = await GoogleMapsService.calculateDistances(origins, destinations);
 
       resBody = resultsGoogleDistance[0];
 
