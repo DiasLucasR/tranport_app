@@ -11,8 +11,28 @@ const LoginController = {
     const { login, password } = req.body;
     try {
       let user = await prisma.user.findFirst({
-        where: { email: String(login),  password: crypto.createHash('md5').update(String(password)).digest("hex")},
+        where: { email: String(login)},
       });
+      
+
+      console.log(user)
+
+      if (!user) {
+        return res.status(404).json({
+            status: "error",
+            message: "Usuário não encontrado",
+        });
+      }
+
+      const isPasswordValid = (crypto.createHash('md5').update(String(password)).digest("hex") == user.password);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({
+            status: "error",
+            message: "Senha incorreta",
+        });
+      }
+
       return res.status(200).json({
         status: "success",
         data: {

@@ -13,26 +13,17 @@ import {
 import { Link } from "lucide-react";
 import { AuthService } from "../../../Services/AuthService";
 import { trackPromise } from "react-promise-tracker";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState('');
 
   const [confirmPass, setConfirmPass] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    if(urlParams.get('role') === 'driver'){
-      setRole('2')
-    }else if(urlParams.get('role') === 'passenger'){
-      setRole('3')
-    }
-  }, [location]);
 
   const handleRegistro = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,10 +35,19 @@ export default function RegisterPage() {
       alert("Preencha todos os campos!");
       return;
     }
-    trackPromise(AuthService.register({name, email, password, role}));
+    trackPromise(AuthService.register({name, email, password, role:3})).then(res => {
+
+    }).catch(err => {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Erro ao registrar usuario' + err,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
+    });
     navigate('/login')
   };
-
+ console.log("aqui")
   return (
     <Card className="w-full">
       <CardHeader>

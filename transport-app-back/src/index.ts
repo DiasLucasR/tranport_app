@@ -16,9 +16,9 @@ app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Bem-vindo à API Transporte APP - Criado por Lucas Dias - https://github.com/DiasLucasR' });
 });
 
-app.use('/api/ride', require('./routes/ride'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/auth', require('./routes/auth'));
+app.use('/ride', require('./routes/ride'));
+app.use('/users', require('./routes/users'));
+app.use('/auth', require('./routes/auth'));
 
 // Iniciar o servidor
 app.listen(PORT, () => {

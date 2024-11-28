@@ -5,6 +5,7 @@ import GoogleMapReact from "google-map-react";
 import { trackPromise } from "react-promise-tracker";
 import { RideService } from "../../Services/RideService";
 import { RideEstimateRetunProps, RideOptionsProps } from "../../types/RideTypes";
+import Swal from "sweetalert2";
 
 export default function NewTrip() {
   const [destination, setDestination] = useState("");
@@ -36,9 +37,20 @@ export default function NewTrip() {
       "value": driver.value
      }
     trackPromise(RideService.confirmRide(reqBody)).then(res =>{
-
-
-
+      setRideOptions([])
+      Swal.fire({
+        title: 'Sucesso!',
+        text: 'Viagem solicitada com suvesso',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
+    }).catch(err => {
+      Swal.fire({
+        title: 'Erro!',
+        text: 'Erro ao solicitar viagem' + err,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
     })
   };
 
@@ -52,6 +64,7 @@ export default function NewTrip() {
             value={origin}
             onChange={(e) => setOrigin(e.target.value)}
             fullWidth
+            className="bg-white"
           />
         </span>
         <span className="w-full md:w-[44%]">
@@ -61,6 +74,7 @@ export default function NewTrip() {
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             fullWidth
+            className="bg-white"
           />
         </span>
         <Button

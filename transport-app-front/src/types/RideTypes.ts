@@ -1,15 +1,31 @@
 export interface RideProps {
-    id: string;
-    destination: string;
-    date: string;
-    value: number;
-  }
-
+  date: string; 
+  destination: string;
+  distance: number; 
+  driver: DriverProps;
+  driverId: number;
+  duration: string; 
+  id: number;
+  origin: string;
+  userId: number;
+  value: number;
+}
   export interface DriverProps {
     id: number;
     name: string
   }
   
+  export interface RideHistoryProps{
+    customer_id: string,
+    rides: RideProps[]
+  }
+
+  export interface ParamsAllRides{
+    driver_id: number;
+  }
+  export interface TripHistoryProps{
+    history: RideHistoryProps
+  }
   export interface RideConfirmProps {
     origin: string;
     destination: string;

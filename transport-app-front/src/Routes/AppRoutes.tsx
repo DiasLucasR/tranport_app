@@ -15,8 +15,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({ allowedAccessLevels = [] }) =
   const { isAuthenticated, accessLevel } = useAuth();
   const location = useLocation();
 
-
-  if (!isAuthenticated && location.pathname !== '/login') {
+  if (!isAuthenticated && location.pathname !== '/login' && location.pathname !== '/register') {
     return <Navigate to="/login" />;
   }
 

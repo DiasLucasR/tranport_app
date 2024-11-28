@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient, User } from "@prisma/client";
 import GoogleMapsService from "../services/GoogleMapsService";
-const { format } = require('date-fns');
+const { format } = require("date-fns");
 
 export interface RideEstimateReturnProps {
   origin: {
@@ -24,21 +24,32 @@ export interface RideEstimateReturnProps {
       comment: string;
     };
     value: number;
-  }[]
+  }[];
 }
 
 const prisma = new PrismaClient();
 
 const RideController = {
-    
   index: async (req: Request, res: Response): Promise<Response> => {
     const params = req.params;
-    console.log(params.customer_id)
+    const query = req.query;
+
+    const whereConditions: any = {};
+
+    if (params.customer_id) {
+      whereConditions.userId = Number(params.customer_id);
+    }
+  
+    if (query.driver_id && query.driver_id != '0') {
+      whereConditions.driverId = Number(query.driver_id);
+    }
+
+
     try {
       let trips: any = [];
       let ridesInfo: any = {};
       trips = await prisma.trips.findMany({
-        where: {userId: Number(params.customer_id)},
+        where: whereConditions,
       });
 
       ridesInfo.rides = await Promise.all(
@@ -47,14 +58,13 @@ const RideController = {
             where: { id: trip.driverId },
           });
           trip.driver = {
-            id: driverTrip?.id , 
-            name: driverTrip?.name, 
+            id: driverTrip?.id,
+            name: driverTrip?.name,
           };
           return trip;
         })
       );
       ridesInfo.customer_id = params.customer_id;
-
 
       return res.status(200).json({
         status: "success",
@@ -74,14 +84,14 @@ const RideController = {
     let trip = await prisma.trips.create({
       data: {
         date: new Date(),
-        origin: body.origin ,
+        origin: body.origin,
         driverId: body.driver.id,
-        destination: body.destination ,
-        distance: Number(body.distance.replace('km', '').toString()) ,
-        duration: body.duration ,
-        value: Number(body.value) ,
-        userId: Number(body.customer_id) 
-      }
+        destination: body.destination,
+        distance: Number(body.distance.replace("km", "").toString()),
+        duration: body.duration,
+        value: Number(body.value),
+        userId: Number(body.customer_id),
+      },
     });
 
     try {
@@ -98,7 +108,6 @@ const RideController = {
     }
   },
   estimateRide: async (req: Request, res: Response): Promise<Response> => {
-
     const reqBody = req.body;
     let resBody: any = {};
 
@@ -106,44 +115,48 @@ const RideController = {
     const destinations = [reqBody.destination];
 
     try {
-  
       // const resultsGoogleDistance = await GoogleMapsService.calculateDistances(origins, destinations);
 
-      const resultsGoogleDistance = [{
-        "origin": "Rua Antonio Lopes da Silva, 867A, Vila Atlantida, Montes Claros",
-        "destination": "Joao Ferreira, 531, Vila Atlantida, Montes Claros",
-        "distance": "20 km",
-        "duration": "1 min"
-      }];
-
+      const resultsGoogleDistance = [
+        {
+          origin:
+            "Rua Antonio Lopes da Silva, 867A, Vila Atlantida, Montes Claros",
+          destination: "Joao Ferreira, 531, Vila Atlantida, Montes Claros",
+          distance: "20 km",
+          duration: "1 min",
+        },
+      ];
 
       resBody = resultsGoogleDistance[0];
-      
+
       let drivers = await prisma.drivers.findMany({
-        where: {minKm : {lte: parseFloat(resultsGoogleDistance[0].distance.replace('km', ''))} },
+        where: {
+          minKm: {
+            lte: parseFloat(
+              resultsGoogleDistance[0].distance.replace("km", "")
+            ),
+          },
+        },
       });
       resBody.options = [];
 
-      resBody.options = drivers?.map(driver => {
-        return ({
+      resBody.options = drivers?.map((driver) => {
+        return {
           id: driver.id,
           name: driver.name,
           description: driver.description,
           vehicle: driver.car,
-          review:{
-            rating: driver.rating
+          review: {
+            rating: driver.rating,
           },
-          value: driver.rate
-        })
+          value: driver.rate,
+        };
       });
-
 
       return res.status(200).json({
         status: "success",
-        data: resBody
+        data: resBody,
       });
-
-       
     } catch (error: any) {
       return res.status(500).json({
         status: "error",
@@ -151,8 +164,27 @@ const RideController = {
         error: error.message,
       });
     }
-  
-}
-}
+  },
+  getAllDrivers: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      let allDrivers = await prisma.drivers.findMany({});
+
+      let drivers = allDrivers.map((driver) => {
+        return { id: driver.id, name: driver.name };
+      });
+
+      return res.status(200).json({
+        status: "success",
+        data: drivers,
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        status: "error",
+        message: "Erro ao buscar motoristas",
+        error: error.message,
+      });
+    }
+  },
+};
 
 export default RideController;

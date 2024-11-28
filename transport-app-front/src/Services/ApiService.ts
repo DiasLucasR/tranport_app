@@ -4,8 +4,8 @@ class ApiService {
   private axiosInstance: AxiosInstance;
 
   constructor() {
-    console.log('constructor')
-    const baseURL = process.env.REACT_APP_API_URL + '/api/';
+
+    const baseURL = process.env.REACT_APP_API_URL;
     const headers = {
       Authorization: process.env.REACT_APP_AUTHORIZATION_LOCAL,
     };

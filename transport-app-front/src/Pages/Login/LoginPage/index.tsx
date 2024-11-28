@@ -52,9 +52,6 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <FormLabel>
-            <Checkbox onChange={e => setRememberme(e.target.checked)} />  Lembrar de mim
-            </FormLabel>
             <Button
               type="submit"
               variant="contained"
@@ -64,12 +61,9 @@ export default function LoginPage() {
               Entrar
             </Button>
           </form>
-          <div className="mt-4 text-center flex justify-between">
-          <Link to="/register?role=driver" className="text-sm text-blue-600 hover:underline">
-              Registre-se como motorista
-            </Link>
-            <Link to="/register?role=passenger" className="text-sm text-blue-600 hover:underline">
-              Registre-se como passageiro
+          <div className="mt-4 text-center flex justify-center">
+            <Link to="/register" className="text-sm text-blue-600 hover:underline">
+              Registre-se 
             </Link>
           </div>
         </CardContent>

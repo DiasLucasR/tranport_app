@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { AuthService } from "../Services/AuthService";
 import { trackPromise } from "react-promise-tracker";
+import Swal from "sweetalert2";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -49,9 +50,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         return true;
       })
       .catch((err) => {
-        console.log(err);
-        window.alert(err);
-        
         return false;
       });
   };
