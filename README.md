@@ -1,5 +1,5 @@
-# tranport_app
-Tranport App Com Integração Google Maps
+# transport_app
+Transport App Com Integração Google Maps
 
 ## Tecnologias Utilizadas
 
